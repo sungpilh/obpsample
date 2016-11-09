@@ -2,15 +2,10 @@ package com.jbfg.oauth;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Component;
-
 import java.net.URLEncoder;
 import java.util.Collections;
-import java.util.List;
 import java.util.ArrayList;
-import java.io.IOException;
 import java.util.Date;
-// For the HMAC
-import java.security.SignatureException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 

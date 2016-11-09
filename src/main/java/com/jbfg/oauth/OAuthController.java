@@ -19,6 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
+ * OAuth 1.0a 인증 및 API 샘플
+ * OAuth 1.0를 통해 OBP API 호출 시 헤더에 입력할 내용을 생성해주는 샘플 애플리케이션을 구현하였음
+ *
+ * OAuth 인증 이용시 순서는 처음 서버에서 Oauth initiate endpoint를 통해 접근을읗
+*
+ *
  * Created by Sungpil Hyun on 2016. 11. 8..
  */
 @Controller
@@ -33,12 +39,14 @@ public class OAuthController {
     APIClient client;
 
     /**
+     *
      * @return
      * @throws Exception
      */
     @RequestMapping("/oauth")
     public String oauthStart(HttpServletRequest request) throws Exception {
 
+        //Request Token 요청
         String authorizationHeader = authAuthenticator.generateOauthHeader(OAuthAuthenticator.init_uri, "POST", "http://localhost:8080/callback", null, null, null, new String[]{});
         client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
 
@@ -59,7 +67,7 @@ public class OAuthController {
     }
 
     /**
-     * Request Token 요청을 수행한다.
+     * Access Token 요청을 수행한다.
      *
      * @param params
      * @return
@@ -100,11 +108,8 @@ public class OAuthController {
             String api = API.applyAPIParameter(API.GetUserCurrent);
 
             String authorizationHeader = authAuthenticator.generateOauthHeader(api, "GET", null, oauthToken, oauthTokenSecret, null, new String[]{});
-
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
-
             JSONObject currentUser = new JSONObject(client.get(API.host + api, new HashMap()));
-
             System.out.println(currentUser.toString(3));
 
             String userId = currentUser.getString("user_id");

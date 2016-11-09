@@ -1,6 +1,7 @@
 package com.jbfg.login;
 
 import com.jbfg.APIClient;
+import com.jbfg.api.API;
 import org.apache.http.HttpHeaders;
 import org.apache.http.message.BasicHeader;
 import org.json.JSONObject;
@@ -39,25 +40,17 @@ public class Login {
     }
 
 
-    public void processLogin(LoginSuccessCallback callback) throws Exception {
+    public String processLogin() throws Exception {
 
         String header = "DirectLogin username=\"" + username + "\",password=\"" + password + "\", consumer_key=\"" + consumerKey + "\"";
 
         client.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));
         client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, header));
 
-        String resultString = client.post("/my/logins/direct", null);
+        String resultString = client.post(API.host + "/my/logins/direct", null);
         JSONObject result = new JSONObject(resultString);
 
-        try {
-            callback.loginSuccess(result.getString("token"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(result.getString("error"));
-        }
+        return result.getString("token");
     }
 
-    protected interface LoginSuccessCallback {
-        void loginSuccess(String token);
-    }
 }

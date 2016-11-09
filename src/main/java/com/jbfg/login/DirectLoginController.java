@@ -1,8 +1,6 @@
 package com.jbfg.login;
 
 import com.jbfg.APIClient;
-import org.apache.http.HttpHeaders;
-import org.apache.http.message.BasicHeader;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,17 +23,18 @@ public class DirectLoginController {
 
         login.setUsername(email);
         login.setPassword(password);
-
+        String token = "";
         try {
-            login.processLogin( token -> {
-                client.removeHeader(HttpHeaders.AUTHORIZATION);
-                client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, "DirectLogin token=\""+ token+"\""));
-            });
-        }catch(Exception e){
+            token = login.processLogin();
+            //client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, "DirectLogin token=\"" + token + "\""));
+            //API test
+
+
+        } catch (Exception e) {
             return e.getMessage();
         }
 
-        return "SUCCESS";
+        return token;
     }
 
 }

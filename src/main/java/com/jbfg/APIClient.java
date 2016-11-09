@@ -161,7 +161,6 @@ public class APIClient {
             removeHeader(header.getName());
             headers.add(header);
         }
-
     }
 
     public void removeHeader(String key) {
@@ -174,10 +173,5 @@ public class APIClient {
             }
         }
     }
-
-    public void emptyHeaders() {
-        headers.removeAll(headers);
-    }
-
 
 }

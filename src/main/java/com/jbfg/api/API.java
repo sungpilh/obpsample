@@ -49,10 +49,13 @@ public class API {
         return  prefix + apiString;
     }
 
+
     public static String CreateAccount = "/banks/{bank_id}/accounts/{new_account_id}";  //PUT
+    //Account
     //{  "user_id":"A user_id",  "label":"CURRENT",  "type":"Label",  "balance":{    "currency":"EUR",    "amount":"0"  }}
 
     public static String CreateView = "/banks/{bank_id}/accounts/{account_id}/views";  //POST
+    //View
     // {  "name":"Name of view to create",  "description":"Description of view (this example is public, uses the public alias, and has limited access to account data)",  "is_public":true,  "which_alias_to_use":"_public_",  "hide_metadata_if_alias_used":true,  "allowed_actions":["can_see_transaction_start_date","can_see_bank_account_label","can_see_tags"]}
 
     public static String DeleteView = "/banks/{bank_id}/accounts/{account_id}/views/{view_id}"; //DELETE
@@ -84,9 +87,11 @@ public class API {
     public static String GetAccountsAtAllBanks = "/accounts"; //GET
 
     public static String UpdateAccountLabel = "/banks/{bank_id}/accounts/{account_id}"; //POST
+    //AccountLabel
     //{  "id":"{account_id} of the account we want to update",  "label":"New label",  "bank_id":"{bank_id}"}
 
     public static String UpdateView = "/banks/{bank_id}/accounts/{account_id}/views/{view_id}"; //PUT
+    //View
     //{  "description":"New description of view",  "is_public":false,  "which_alias_to_use":"_public_",  "hide_metadata_if_alias_used":true,  "allowed_actions":["can_see_transaction_start_date","can_see_bank_account_label"]}
 
     public static String GetBank = "/banks/{bank_id}"; //GET
@@ -104,18 +109,23 @@ public class API {
     public static String GetTheTransactionRequestTypesSupportedByTheBank = "/banks/{bank_id}/transaction-request-types"; //GET
 
     public static String AddKYCCheck = "/banks/{bank_id}/customers/{customer_id}/kyc_check"; //POST
+    //KYCCheck
     //{  "id":"98FRd987auhf87jab",  "customer_number":"1239879",  "date":"2013-01-22T00:08:00Z",  "how":"online_meeting",  "staff_user_id":"67876",  "staff_name":"Simon Redfern",  "satisfied":true,  "comments":""}
 
     public static String AddKYCDocument = "/banks/{bank_id}/customers/{customer_id}/kyc_documents"; //POST
+    //KYCDocument
     //{  "id":"wuwjfuha234678",  "customer_number":"1234",  "type":"passport",  "number":"123567",  "issue_date":"2013-01-22T00:08:00Z",  "issue_place":"London",  "expiry_date":"2013-01-22T00:08:00Z"}
 
     public static String AddKYCMedia = "/banks/{bank_id}/customers/{customer_id}/kyc_media"; //POST
+    //KYCMedia
     //{  "id":"73hyfgayt6ywerwerasd",  "customer_number":"1239879",  "type":"image",  "url":"http://www.example.com/id-docs/123/image.png",  "date":"2013-01-22T00:08:00Z",  "relates_to_kyc_document_id":"wuwjfuha234678",  "relates_to_kyc_check_id":"98FRd987auhf87jab"}
 
     public static String AddKYCStatus = "/banks/{bank_id}/customers/{customer_id}/kyc_statuses"; //POST
+    //KYCStatus
     //{  "customer_number":"8762893876",  "ok":true,  "date":"2013-01-22T00:08:00Z"}
 
     public static String AddSocialMediaHandle = "/banks/{bank_id}/customers/{customer_id}/social_media_handles"; //POST
+    //SocialMediaHandle
     //{  "customer_number":"8762893876",  "type":"twitter",  "handle":"susan@example.com",  "date_added":"2013-01-22T00:08:00Z",  "date_activated":"2013-01-22T00:08:00Z"}
 
     public static String GetCRMEventsForTheLoggedInUser = "/banks/{bank_id}/crm-events"; //GET
@@ -144,6 +154,7 @@ public class API {
     public static String GetMeetings = "/banks/{bank_id}/meetings"; //GET
 
     public static String AddCorporateLocationToCounterparty = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/metadata/corporate_location"; //POST
+    //Location  -> Map
     //{  "corporate_location":{    "latitude":52.5571573,    "longitude":13.3728025  }}
 
     public static String AddCounterpartymoreInfo = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/metadata/more_info"; //POST
@@ -156,6 +167,7 @@ public class API {
     //{  "value":"holiday"}
 
     public static String AddImage = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transactions/{transaction_id}/metadata/images"; //POST
+    //Image
     //{  "label":"The new printer",  "URL":"www.example.com/images/printer.png"}
 
     public static String AddComment = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transactions/{transaction_id}/metadata/comments"; //POST
@@ -168,6 +180,7 @@ public class API {
     //{  "narrative":"My new (old!) piano"}
 
     public static String AddPhysicalLocationToOtherBankAccount = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/metadata/physical_location"; //POST
+    // Location -> Map
     //{  "physical_location":{    "latitude":52.5571573,    "longitude":13.3728025  }}
 
     public static String AddPublicAliasToOtherBanAccount = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/public_alias"; //POST
@@ -177,6 +190,7 @@ public class API {
     //{  "URL":"www.example.com"}
 
     public static String AddWhereTag = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transactions/{transaction_id}/metadata/where"; //POST
+    //Location -> Map
     //{  "where":{    "latitude":52.5571573,    "longitude":13.3728025  }}
 
     public static String CreateCounterpartyPrivateAlias = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/public_alias"; //POST
@@ -225,6 +239,7 @@ public class API {
     public static String GetWhereTag = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transactions/{transaction_id}/metadata/where"; //GET
 
     public static String UpdateCounterpartyCorporateLocation = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/metadata/corporate_location"; //PUT
+    //Location -> Map
     //{  "corporate_location":{    "latitude":52.5571573,    "longitude":13.3728025  }}
 
     public static String UpdateCounterpartyImageUrl = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/metadata/image_url"; //PUT
@@ -234,6 +249,7 @@ public class API {
     //{  "more_info":"More info"}
 
     public static String UpdateCounterpartyPhysicalLocation = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/metadata/physical_location"; //PUT
+    //Location -> Map
     //{  "physical_location":{    "latitude":52.5571573,    "longitude":13.3728025  }}
 
     public static String UpdateCounterpartyPrivateAlias = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts/{other_account_id}/public_alias"; //PUT
@@ -252,18 +268,22 @@ public class API {
     //{  "URL":"www.example.com"}
 
     public static String UpdateWhereTag = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transactions/{transaction_id}/metadata/where"; //PUT
+    //Location -> Map
     //{  "where":{    "latitude":52.5571573,    "longitude":13.3728025  }}
 
     public static String CreateUser = "/users"; //POST
     //{  "email":"someone@example.com",  "username":"my-username",  "password":"my-secure-password",  "first_name":"James",  "last_name":"Brown"}
 
     public static String AddCustomerMessage = "/banks/{bank_id}/customer/{customer_id}/messages"; //POST
+    //CustomerMessage
     //{  "message":"message to send",  "from_department":"from department",  "from_person":"from person"}
 
     public static String CreateCustomer = "/banks/{bank_id}/customers"; //POST
+    //Customer
     //{  "user_id":"user_id to attach this customer to e.g. 123213",  "customer_number":"new customer number 687687678",  "legal_name":"Joe David Bloggs",  "mobile_phone_number":"+44 07972 444 876",  "email":"person@example.com",  "face_image":{    "url":"www.example.com/person/123/image.png",    "date":"2013-01-22T00:08:00Z"  },  "date_of_birth":"2013-01-22T00:08:00Z",  "relationship_status":"Single",  "dependants":1,  "dob_of_dependants":["2013-01-22T00:08:00Z"],  "highest_education_attained":"Bachelor’s Degree",  "employment_status":"Employed",  "kyc_status":true,  "last_ok_date":"2013-01-22T00:08:00Z"}
 
     public static String CreateUserCustomerLink = "/banks/user_customer_links"; //POST
+    //UserCustomerLink
     //{  "user_id":"be106783-b4fa-48e6-b102-b178a11a8e9b",  "customer_id":"02141bc6-0a69-4fba-b4db-a17e5fbbbdcc"}
 
     public static String GetCounterpartiesOfOneAccount = "/banks/{bank_id}/accounts/{account_id}/{view_id}/other_accounts"; //GET
@@ -296,6 +316,7 @@ public class API {
     //{  "id":"89123812",  "answer":"123345"}
 
     public static String CreateTransactionRequest = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transaction-request-types/{transaction_request_type}/transaction-requests"; //POST
+    //TransactionRequest
     //{  "to":{    "bank_id":"BANK_ID",    "account_id":"ACCOUNT_ID"  },  "value":{    "currency":"EUR",    "amount":"100.53"  },  "description":"A description for the transaction to be created"}
 
     public static String GetTransactionRequestTypesFoAccount = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transaction-request-types"; //GET
@@ -303,9 +324,11 @@ public class API {
     public static String GetTransactionRequests = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transaction-requests"; //GET
 
     public static String MakePayment = "/banks/{bank_id}/accounts/{account_id}/{view_id}/transactions"; //POST
+    //Payment
     //{  "bank_id":"To BANK_ID",  "account_id":"To ACCOUNT_ID",  "amount":"12.45"}
 
     public static String AddEntitlementForUser = "/users/{user_id}/entitlements";  //POST
+    //Entitlement
     //{  "bank_id":"obp-bank-x-gh",  "role_name":"CanQueryOtherUser"}
 
     public static String DeleteEntitlement = "/users/{user_id}/entitlement/{entitlement_id}"; //DELETE

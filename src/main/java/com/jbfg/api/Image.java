@@ -5,20 +5,20 @@ package com.jbfg.api;
  */
 public class Image {
 
-    private String url;
+    private String URL;
     private String date;
 
-    public Image(String url, String date) {
-        this.url = url;
+    public Image(String URL, String date) {
+        this.URL = URL;
         this.date = date;
     }
 
-    public String getUrl() {
-        return url;
+    public String getURL() {
+        return URL;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setURL(String URL) {
+        this.URL = URL;
     }
 
     public String getDate() {

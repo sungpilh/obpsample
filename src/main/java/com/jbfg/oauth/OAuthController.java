@@ -10,6 +10,7 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.message.BasicHeader;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,10 +22,10 @@ import java.util.HashMap;
 /**
  * OAuth 1.0a 인증 및 API 샘플
  * OAuth 1.0를 통해 OBP API 호출 시 헤더에 입력할 내용을 생성해주는 샘플 애플리케이션을 구현하였음
- *
+ * <p>
  * OAuth 인증 이용시 순서는 처음 서버에서 Oauth initiate endpoint를 통해 접근을읗
-*
- *
+ * <p>
+ * <p>
  * Created by Sungpil Hyun on 2016. 11. 8..
  */
 @Controller
@@ -39,7 +40,6 @@ public class OAuthController {
     APIClient client;
 
     /**
-     *
      * @return
      * @throws Exception
      */
@@ -56,7 +56,6 @@ public class OAuthController {
 
         String[] tokens = result.split("&");
         for (int i = 0; i < tokens.length; i++) {
-            System.out.println(tokens[i]);
             String[] keyvalue = tokens[i].split("=");
             if (keyvalue.length == 2) {
                 request.getSession().setAttribute(keyvalue[0], keyvalue[1]);
@@ -73,6 +72,7 @@ public class OAuthController {
      * @return
      */
     @RequestMapping("/callback")
+    @ResponseBody
     public String oauthCallback(
             HttpServletRequest request,
             @RequestParam HashMap params) throws Exception {
@@ -91,13 +91,13 @@ public class OAuthController {
             }
         }
 
-        return "redirect:/apiTest";
+        return result;
     }
 
 
-    @RequestMapping("/apiTest")
+    @RequestMapping("/apiTest/{accountId}")
     @ResponseBody
-    public String apiTest(HttpServletRequest request) {
+    public String apiTest(@PathVariable(value = "accountId") String accountId, HttpServletRequest request) {
 
         String result = "";
 
@@ -116,9 +116,9 @@ public class OAuthController {
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            Account account= new Account(userId, "CURRENT", "label", new Balance("EUR", "0"));
-            String json= gson.toJson(account);
-            api = API.applyAPIParameter(API.CreateAccount, "jbfg.01.kr", "821030859101");
+            Account account = new Account(userId, "CURRENT", "label", new Balance("EUR", "0"));
+            String json = gson.toJson(account);
+            api = API.applyAPIParameter(API.CreateAccount, "jbfg.01.kr", accountId);
             authorizationHeader = authAuthenticator.generateOauthHeader(api, "PUT", null, oauthToken, oauthTokenSecret, null, new String[]{});
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
             client.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));   //중요! 없으면 서버에서 인지를 못함
@@ -126,8 +126,8 @@ public class OAuthController {
 
             JSONObject accountResult = new JSONObject(result);
 
-            System.out.println(accountResult.toString(3));
-
+            result = accountResult.toString(3);
+            System.out.println(result);
 
         } catch (Exception e) {
             e.printStackTrace();

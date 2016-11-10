@@ -19,6 +19,9 @@ import java.util.*;
 
 /**
  * Created by Sungpil Hyun on 2016. 8. 2..
+ *
+ * HTTP 요청 을 위한 클라이언트 입니다.
+ *
  */
 
 @Component

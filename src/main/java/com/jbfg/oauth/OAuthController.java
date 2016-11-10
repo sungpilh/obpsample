@@ -9,6 +9,7 @@ import com.jbfg.api.Balance;
 import org.apache.http.HttpHeaders;
 import org.apache.http.message.BasicHeader;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,27 +34,33 @@ public class OAuthController {
 
     static Gson gson = new GsonBuilder().create();
 
-    @Resource
+    @Autowired
     OAuthAuthenticator authAuthenticator;
 
     @Resource
     APIClient client;
 
     /**
+     * 진입 포인트
+     * OAuth 인증이 필요한 API에 접근을 하기위해 사용자를 인증페이지로 이동시키는 역할을 합니다.
      * @return
      * @throws Exception
      */
     @RequestMapping("/oauth")
     public String oauthStart(HttpServletRequest request) throws Exception {
 
-        //Request Token 요청
-        String authorizationHeader = authAuthenticator.generateOauthInitHeader();
+        //초기에 사용할 Header를 생성합니다.
+        String authorizationHeader = authAuthenticator.generateOauthInitHeader("http://localhost:8080/callback");
+
+        //API를 호출하기 전에  Authorization Header 를 추가합니다.
         client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
 
         HashMap params = new HashMap();
 
+        //POST 요청을 수행하여 결과를 받습니다.
         String result = client.post(OAuthAuthenticator.host_url + OAuthAuthenticator.init_uri, params);
 
+        //받은 결과 중 oauth_token  과 oauth_token_secret  을 세션에 저장한다.
         String[] tokens = result.split("&");
         for (int i = 0; i < tokens.length; i++) {
             String[] keyvalue = tokens[i].split("=");
@@ -62,11 +69,13 @@ public class OAuthController {
             }
         }
 
-        return "redirect:" + OAuthAuthenticator.host_url + "/oauth/authorize?" + result;
+        //사용자의 브라우저의 경로를 인증페이지로 리다이렉션 시킨다.
+        return "redirect:" + OAuthAuthenticator.host_url + "/oauth/authorize?oauth_token=" + request.getSession().getAttribute("oauth_token");
     }
 
     /**
-     * Access Token 요청을 수행한다.
+     * 사용자 인증페이지에서 인증을 수행하고 나면
+     * Access Token 요청을 수행합니다.
      *
      * @param params
      * @return
@@ -76,6 +85,7 @@ public class OAuthController {
     public String oauthCallback(
             HttpServletRequest request,
             @RequestParam HashMap params) throws Exception {
+
 
         String authorizationHeader = authAuthenticator.generateOauthAuthorizeHeader(String.valueOf(params.get("oauth_token")), String.valueOf(request.getSession().getAttribute("oauth_token_secret")), String.valueOf(params.get("oauth_verifier")));
         client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));

@@ -7,13 +7,14 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Sungpil Hyun on 2016. 11. 8..
  * <p>
- * This class is
+ * OAuth 인증 헤더 생성
  */
 @Component
 public class OAuthAuthenticator {
@@ -23,14 +24,38 @@ public class OAuthAuthenticator {
     private String consumerKey = "byjfav0qi53eqri25fkqz5ao5wp2bdkdgk3exi2d";
     private String consumerSecret = "xwtwzeolmwvh1dkhhlgwy0yftxumbku2yrskzktt";
 
-    public String generateOauthInitHeader() throws Exception {
-        return generateOauthHeader(OAuthAuthenticator.init_uri, "POST", "http://localhost:8080/callback", null, null, null, new String[]{});
+    /**
+     * 처음 서버와 OBP 간 Handshake 프로세스에서 사용
+     * @param callback 서버에서 받을 callback URL
+     * @return
+     * @throws Exception
+     */
+    public String generateOauthInitHeader(String callback) throws Exception {
+        return generateOauthHeader(OAuthAuthenticator.init_uri, "POST", callback , null, null, null, new String[]{});
     }
 
+    /**
+     * Access Token 요청을 하기 위한 헤더 생성시 사용
+     * @param token
+     * @param tokenSecret
+     * @param verifier
+     * @return
+     * @throws Exception
+     */
     public String generateOauthAuthorizeHeader(String token, String tokenSecret, String verifier) throws Exception {
         return generateOauthHeader(OAuthAuthenticator.token_uri, "POST", null, token, tokenSecret, verifier, new String[]{});
     }
 
+    /**
+     * API 를 사용하기 위한 헤더 생성시 사용
+     * @param uri
+     * @param method
+     * @param token
+     * @param tokenSecret
+     * @param additionalParameters
+     * @return
+     * @throws Exception
+     */
     public String generateOauthAPIHeader(String uri, String method, String token, String tokenSecret, String[] additionalParameters) throws Exception {
         return generateOauthHeader(uri, method, null, token, tokenSecret, null, additionalParameters);
     }
@@ -44,7 +69,7 @@ public class OAuthAuthenticator {
                                       String[] additionalParameters) throws Exception {
         long timestamp = new Date().getTime() / 1000;
 
-        String nonce = "" + Long.toString(timestamp).hashCode();
+        String nonce = UUID.randomUUID().toString();
 
         ArrayList<String> parameters = new ArrayList<String>();
         parameters.add("oauth_consumer_key=" + consumerKey);

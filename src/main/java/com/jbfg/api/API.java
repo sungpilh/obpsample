@@ -5,6 +5,15 @@ import java.util.List;
 
 /**
  * Created by Sungpil Hyun on 2016. 11. 3..
+ *
+ * API 요청시 body 가 필요한 API 중 일부는 Class로 제공됩니다.
+ * 제공 되는 클래스는 API 밑에 Class 명을 표시하였습니다.
+ *
+ * 항목이 하나 인 경우에는 Map을 사용하면 됩니다.
+ *
+ * Location -> Map 표현은 Location object 를 Map 에 넣어서 사용하라는 의미입니다.
+ *
+ *
  */
 public class API {
 
@@ -14,6 +23,8 @@ public class API {
 
     /**
      * apply parameters to API
+     * URI 의 path variable 을 입력되는 파라미터 순서대로 채워줍니다.
+     * 필요한 path variable 과 입력되는 파라미터의 수가 일치해야 합니다.
      *
      * @param apiString
      * @param parameter
@@ -48,7 +59,6 @@ public class API {
 
         return  prefix + apiString;
     }
-
 
     public static String CreateAccount = "/banks/{bank_id}/accounts/{new_account_id}";  //PUT
     //Account

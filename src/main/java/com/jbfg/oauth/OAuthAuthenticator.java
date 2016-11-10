@@ -2,6 +2,7 @@ package com.jbfg.oauth;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Component;
+
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Sungpil Hyun on 2016. 11. 8..
+ * <p>
+ * This class is
  */
 @Component
 public class OAuthAuthenticator {
@@ -20,6 +23,17 @@ public class OAuthAuthenticator {
     private String consumerKey = "byjfav0qi53eqri25fkqz5ao5wp2bdkdgk3exi2d";
     private String consumerSecret = "xwtwzeolmwvh1dkhhlgwy0yftxumbku2yrskzktt";
 
+    public String generateOauthInitHeader() throws Exception {
+        return generateOauthHeader(OAuthAuthenticator.init_uri, "POST", "http://localhost:8080/callback", null, null, null, new String[]{});
+    }
+
+    public String generateOauthAuthorizeHeader(String token, String tokenSecret, String verifier) throws Exception {
+        return generateOauthHeader(OAuthAuthenticator.token_uri, "POST", null, token, tokenSecret, verifier, new String[]{});
+    }
+
+    public String generateOauthAPIHeader(String uri, String method, String token, String tokenSecret, String[] additionalParameters) throws Exception {
+        return generateOauthHeader(uri, method, null, token, tokenSecret, null, additionalParameters);
+    }
 
     public String generateOauthHeader(String uri,
                                       String method,

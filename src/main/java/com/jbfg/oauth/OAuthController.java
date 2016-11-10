@@ -47,7 +47,7 @@ public class OAuthController {
     public String oauthStart(HttpServletRequest request) throws Exception {
 
         //Request Token 요청
-        String authorizationHeader = authAuthenticator.generateOauthHeader(OAuthAuthenticator.init_uri, "POST", "http://localhost:8080/callback", null, null, null, new String[]{});
+        String authorizationHeader = authAuthenticator.generateOauthInitHeader();
         client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
 
         HashMap params = new HashMap();
@@ -77,8 +77,7 @@ public class OAuthController {
             HttpServletRequest request,
             @RequestParam HashMap params) throws Exception {
 
-        String authorizationHeader = authAuthenticator.generateOauthHeader(OAuthAuthenticator.token_uri, "POST", null, String.valueOf(params.get("oauth_token")), String.valueOf(request.getSession().getAttribute("oauth_token_secret")), String.valueOf(params.get("oauth_verifier")), new String[]{});
-
+        String authorizationHeader = authAuthenticator.generateOauthAuthorizeHeader(String.valueOf(params.get("oauth_token")), String.valueOf(request.getSession().getAttribute("oauth_token_secret")), String.valueOf(params.get("oauth_verifier")));
         client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
         String result = client.post(OAuthAuthenticator.host_url + OAuthAuthenticator.token_uri, params);
 
@@ -107,7 +106,7 @@ public class OAuthController {
 
             String api = API.applyAPIParameter(API.GetUserCurrent);
 
-            String authorizationHeader = authAuthenticator.generateOauthHeader(api, "GET", null, oauthToken, oauthTokenSecret, null, new String[]{});
+            String authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "GET", oauthToken, oauthTokenSecret, new String[]{});
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
             JSONObject currentUser = new JSONObject(client.get(API.host + api, new HashMap()));
             System.out.println(currentUser.toString(3));
@@ -119,7 +118,7 @@ public class OAuthController {
             Account account = new Account(userId, "CURRENT", "label", new Balance("EUR", "0"));
             String json = gson.toJson(account);
             api = API.applyAPIParameter(API.CreateAccount, "jbfg.01.kr", accountId);
-            authorizationHeader = authAuthenticator.generateOauthHeader(api, "PUT", null, oauthToken, oauthTokenSecret, null, new String[]{});
+            authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "PUT", oauthToken, oauthTokenSecret, new String[]{});
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
             client.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));   //중요! 없으면 서버에서 인지를 못함
             result = client.putJson(API.host + api, json);

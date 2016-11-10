@@ -104,11 +104,9 @@ public class OAuthController {
             String oauthToken = (String) request.getSession().getAttribute("oauth_token");
             String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
 
-            String api = API.applyAPIParameter(API.GetUserCurrent);
-
-            String authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "GET", oauthToken, oauthTokenSecret, new String[]{});
+            String authorizationHeader = authAuthenticator.generateOauthAPIHeader(API.GetUserCurrent, "GET", oauthToken, oauthTokenSecret, new String[]{});
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
-            JSONObject currentUser = new JSONObject(client.get(API.host + api, new HashMap()));
+            JSONObject currentUser = new JSONObject(client.get(API.host + API.GetUserCurrent, new HashMap()));
             System.out.println(currentUser.toString(3));
 
             String userId = currentUser.getString("user_id");
@@ -117,7 +115,8 @@ public class OAuthController {
 
             Account account = new Account(userId, "CURRENT", "label", new Balance("EUR", "0"));
             String json = gson.toJson(account);
-            api = API.applyAPIParameter(API.CreateAccount, "jbfg.01.kr", accountId);
+
+            String api = API.applyAPIParameter(API.CreateAccount, "jbfg.01.kr", accountId);
             authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "PUT", oauthToken, oauthTokenSecret, new String[]{});
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
             client.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));   //중요! 없으면 서버에서 인지를 못함

@@ -1,4 +1,7 @@
-- OAuth 1.0a 샘플 클라이언트
+* OAuth 1.0a 샘플 클라이언트
+
+- 주석 및 설명 추가 중입니다.
+
 
 Spring boot Application
 
@@ -14,3 +17,5 @@ https://github.com/OpenBankProject/OBP-API/wiki/OAuth-1.0-Server
 https://github.com/OpenBankProject/OBP-API/wiki/OAuth-Client-SDKS
 http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art014
 https://oauth.net/core/1.0a/
+
+

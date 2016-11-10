@@ -42,7 +42,7 @@ public class OAuthAuthenticator {
      * @return
      * @throws Exception
      */
-    public String generateOauthAuthorizeHeader(String token, String tokenSecret, String verifier) throws Exception {
+    public String generateAccessTokenHeader(String token, String tokenSecret, String verifier) throws Exception {
         return generateOauthHeader(OAuthAuthenticator.token_uri, "POST", null, token, tokenSecret, verifier, new String[]{});
     }
 

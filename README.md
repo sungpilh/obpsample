@@ -1,6 +1,4 @@
-* OAuth 1.0a 샘플 클라이언트
-
-- 주석 및 설명 추가 중입니다.
+# OAuth 1.0a 샘플 클라이언트
 
 Spring boot Application 으로 구현되어 있습니다.
 

@@ -86,12 +86,16 @@ public class OAuthController {
             HttpServletRequest request,
             @RequestParam HashMap params) throws Exception {
 
-
-        String authorizationHeader = authAuthenticator.generateOauthAuthorizeHeader(String.valueOf(params.get("oauth_token")), String.valueOf(request.getSession().getAttribute("oauth_token_secret")), String.valueOf(params.get("oauth_verifier")));
+        //Access Token 요청을 위한 헤더를 생성합니다. Handshake 에서 받은 oauth_token_secret 이 필요합니다.
+        String authorizationHeader = authAuthenticator.generateAccessTokenHeader(String.valueOf(params.get("oauth_token")), String.valueOf(request.getSession().getAttribute("oauth_token_secret")), String.valueOf(params.get("oauth_verifier")));
         client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+
+        //API에 사용할 token과 token_secret을 요청합니다.
         String result = client.post(OAuthAuthenticator.host_url + OAuthAuthenticator.token_uri, params);
 
         String[] tokens = result.split("&");
+
+        //받은 token과 token_secret을 저장하여 API 호출에 사용할 수 있도록 합니다. 여기서는 세션에 저장했습니다.
         for (int i = 0; i < tokens.length; i++) {
             String[] keyvalue = tokens[i].split("=");
 
@@ -111,11 +115,16 @@ public class OAuthController {
         String result = "";
 
         try {
+
             String oauthToken = (String) request.getSession().getAttribute("oauth_token");
             String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
 
+            //저장된 oauth_token과 oauth_token_secret을 가지고 api 를 호출하기 위한 헤더를 생성합니다.
+            //api를 호출 할때 마다 다른 header 가 생성됩니다.
             String authorizationHeader = authAuthenticator.generateOauthAPIHeader(API.GetUserCurrent, "GET", oauthToken, oauthTokenSecret, new String[]{});
+
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+
             JSONObject currentUser = new JSONObject(client.get(API.host + API.GetUserCurrent, new HashMap()));
             System.out.println(currentUser.toString(3));
 
@@ -123,10 +132,14 @@ public class OAuthController {
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+            //새로운 어카운트를 등록하기 위해 Account 오브젝트를 생성합니다.
             Account account = new Account(userId, "CURRENT", "label", new Balance("EUR", "0"));
             String json = gson.toJson(account);
 
+            //CreateAccount에 필요한 파라미터를 지정합니다.
             String api = API.applyAPIParameter(API.CreateAccount, "jbfg.01.kr", accountId);
+
+            //파라미터가 적용된 api와 method, token, token_secret 을 사용하여 헤더를 생성합니다.
             authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "PUT", oauthToken, oauthTokenSecret, new String[]{});
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
             client.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));   //중요! 없으면 서버에서 인지를 못함

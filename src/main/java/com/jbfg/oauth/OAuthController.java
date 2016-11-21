@@ -3,18 +3,13 @@ package com.jbfg.oauth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jbfg.APIClient;
-import com.jbfg.api.API;
-import com.jbfg.api.Account;
-import com.jbfg.api.Balance;
+import com.jbfg.api.*;
 import org.apache.http.HttpHeaders;
 import org.apache.http.message.BasicHeader;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -107,6 +102,66 @@ public class OAuthController {
         return result;
     }
 
+    @RequestMapping("/customer")
+    @ResponseBody
+    public String customertest(HttpServletRequest request) {
+
+        String result ="";
+        try {
+            String oauthToken = (String) request.getSession().getAttribute("oauth_token");
+            String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
+
+            System.out.println(oauthToken);
+            System.out.println(oauthTokenSecret);
+
+            String authorizationHeader = authAuthenticator.generateOauthAPIHeader(API.applyAPIParameter(API.GetUserCurrent), "GET", oauthToken, oauthTokenSecret, new String[]{});
+
+            client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+
+            JSONObject currentUser = new JSONObject(client.get(API.host + API.applyAPIParameter(API.GetUserCurrent), new HashMap()));
+            System.out.println(currentUser.toString(3));
+
+            String userId = currentUser.getString("user_id");
+
+            Customer customer = new Customer(userId,
+                    "1111111111",
+                    "Joe David Blogss",
+                    "+821030859101",
+                    "hyunsp@test.com.xxx",
+                    "2013-01-22T00:08:00Z",
+                    "Single",
+                    1,
+                    new String[] {"2013-01-22T00:08:00Z"},
+                    "Bachelor’s Degree",
+                    "Employed",
+                    true,
+                    "2016-11-21T00:08:00Z",
+                    new Image("www.example.com/person/123/image.png","2016-11-21T00:08:00Z")
+                    );
+
+            String json = gson.toJson(customer);
+
+            System.out.println(json);
+
+            //CreateAccount에 필요한 파라미터를 지정합니다.
+            String api = API.applyAPIParameter(API.CreateCustomer, "jbfg.01.kr");
+
+            //파라미터가 적용된 api와 method, token, token_secret 을 사용하여 헤더를 생성합니다.
+            authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "POST", oauthToken, oauthTokenSecret, new String[]{});
+            client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+            client.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));   //중요! 없으면 서버에서 인지를 못함
+            result = client.postJson(API.host + api, json);
+
+            JSONObject accountResult = new JSONObject(result);
+
+            result = accountResult.toString(3);
+            System.out.println(result);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 
     @RequestMapping("/apiTest/{accountId}")
     @ResponseBody
@@ -125,7 +180,7 @@ public class OAuthController {
 
             client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
 
-            JSONObject currentUser = new JSONObject(client.get(API.host + API.GetUserCurrent, new HashMap()));
+            JSONObject currentUser = new JSONObject(client.get(API.host + API.applyAPIParameter(API.GetUserCurrent), new HashMap()));
             System.out.println(currentUser.toString(3));
 
             String userId = currentUser.getString("user_id");

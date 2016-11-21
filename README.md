@@ -23,4 +23,15 @@ http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art014
 https://oauth.net/core/1.0a/
 
 
-2016/11/21 API 클래스의 필드 중 오타를 수정하였습니다.
+2016/11/21
+
+- API 클래스의 필드 중 오타를 수정하였습니다.
+
+Customer 클래스의 mobile_hone_number -> mobile_phone_number
+
+Image 클래스의 URL -> url
+
+- OauthController 에 Customer 생성 샘플이 추가되었습니다.
+
+
+

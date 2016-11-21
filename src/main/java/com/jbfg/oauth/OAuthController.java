@@ -136,7 +136,7 @@ public class OAuthController {
                     "Employed",
                     true,
                     "2016-11-21T00:08:00Z",
-                    new Image("www.example.com/person/123/image.png","2016-11-21T00:08:00Z")
+                    new Image("www.example.com/person/123/image.png","2016-11-21T00:08:00Z")   // 이미지 정보 꼭 넣어 주셔야 합니다.
                     );
 
             String json = gson.toJson(customer);
@@ -144,7 +144,7 @@ public class OAuthController {
             System.out.println(json);
 
             //CreateAccount에 필요한 파라미터를 지정합니다.
-            String api = API.applyAPIParameter(API.CreateCustomer, "jbfg.01.kr");
+            String api = API.applyAPIParameter(API.CreateCustomer, "jbfg.02.kr");
 
             //파라미터가 적용된 api와 method, token, token_secret 을 사용하여 헤더를 생성합니다.
             authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "POST", oauthToken, oauthTokenSecret, new String[]{});

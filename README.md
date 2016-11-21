@@ -23,3 +23,4 @@ http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art014
 https://oauth.net/core/1.0a/
 
 
+2016/11/21 API 클래스의 필드 중 오타를 수정하였습니다.

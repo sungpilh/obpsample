@@ -5,8 +5,7 @@ package com.jbfg.api;
  */
 public class KYCCheck {
 
-    private String id;
-    private String customer_name;
+    private String customer_number;
     private String date;  //format : 2013-01-22T00:08:00Z
     private String how;
     private String staff_user_id;
@@ -14,9 +13,8 @@ public class KYCCheck {
     private boolean satisfied;
     private String comments;
 
-    public KYCCheck(String id, String customer_name, String date, String how, String staff_user_id, String staff_name, boolean satisfied, String comments) {
-        this.id = id;
-        this.customer_name = customer_name;
+    public KYCCheck(String customer_number, String date, String how, String staff_user_id, String staff_name, boolean satisfied, String comments) {
+        this.customer_number = customer_number;
         this.date = date;
         this.how = how;
         this.staff_user_id = staff_user_id;
@@ -25,20 +23,12 @@ public class KYCCheck {
         this.comments = comments;
     }
 
-    public String getId() {
-        return id;
+    public String getCustomer_number() {
+        return customer_number;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCustomer_name() {
-        return customer_name;
-    }
-
-    public void setCustomer_name(String customer_name) {
-        this.customer_name = customer_name;
+    public void setCustomer_number(String customer_number) {
+        this.customer_number = customer_number;
     }
 
     public String getDate() {

@@ -5,7 +5,6 @@ package com.jbfg.api;
  */
 public class KYCMedia {
 
-    private String id;
     private String customer_number;
     private String type;
     private String url;
@@ -13,22 +12,13 @@ public class KYCMedia {
     private String relates_to_kyc_document_id;  //kyc_document_id
     private String relates_to_kyc_check_id; //kyc_check_id
 
-    public KYCMedia(String id, String customer_number, String type, String url, String date, String relates_to_kyc_document_id, String relates_to_kyc_check_id) {
-        this.id = id;
+    public KYCMedia(String customer_number, String type, String url, String date, String relates_to_kyc_document_id, String relates_to_kyc_check_id) {
         this.customer_number = customer_number;
         this.type = type;
         this.url = url;
         this.date = date;
         this.relates_to_kyc_document_id = relates_to_kyc_document_id;
         this.relates_to_kyc_check_id = relates_to_kyc_check_id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getCustomer_number() {

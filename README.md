@@ -34,4 +34,10 @@ Image 클래스의 URL -> url
 - OauthController 에 Customer 생성 샘플이 추가되었습니다.
 
 
+2016/11/22
+- AddKYCCheck, AddKYCDocument, AddKYCMedia, AddKYCStatus 가 변동 되었습니다.
+- API의 변동사항이 계속 발생하고 있으므로, 사용시 jbfg-explorer.openbankproject.com 를 참고하셔서 사용하시기 바랍니다.
+
+
+
 

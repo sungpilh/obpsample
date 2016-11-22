@@ -4,7 +4,6 @@ package com.jbfg.api;
  * Created by Sungpil Hyun on 2016. 11. 4..
  */
 public class KYCDocument {
-    private String id;
     private String customer_number;
     private String type;
     private String number;
@@ -12,22 +11,13 @@ public class KYCDocument {
     private String issue_place;
     private String expiry_date; //format: 2013-01-22T00:08:00Z
 
-    public KYCDocument(String id, String customer_number, String type, String number, String issue_date, String issue_place, String expiry_date) {
-        this.id = id;
+    public KYCDocument(String customer_number, String type, String number, String issue_date, String issue_place, String expiry_date) {
         this.customer_number = customer_number;
         this.type = type;
         this.number = number;
         this.issue_date = issue_date;
         this.issue_place = issue_place;
         this.expiry_date = expiry_date;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getCustomer_number() {

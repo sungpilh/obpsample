@@ -118,19 +118,18 @@ public class API {
 
     public static String GetTheTransactionRequestTypesSupportedByTheBank = "/banks/{bank_id}/transaction-request-types"; //GET
 
-    public static String AddKYCCheck = "/banks/{bank_id}/customers/{customer_id}/kyc_check"; //POST
+    public static String AddKYCCheck = "/banks/{bank_id}/customers/{customer_id}/kyc_check/{kyc_check_id}"; //PUT
     //KYCCheck
-    //{  "id":"98FRd987auhf87jab",  "customer_number":"1239879",  "date":"2013-01-22T00:08:00Z",  "how":"online_meeting",  "staff_user_id":"67876",  "staff_name":"Simon Redfern",  "satisfied":true,  "comments":""}
+    //{  "customer_number":"1239879",  "date":"2013-01-22T00:08:00Z",  "how":"online_meeting",  "staff_user_id":"67876",  "staff_name":"Simon Redfern",  "satisfied":true,  "comments":""}
 
-    public static String AddKYCDocument = "/banks/{bank_id}/customers/{customer_id}/kyc_documents"; //POST
+    public static String AddKYCDocument = "/banks/{bank_id}/customers/{customer_id}/kyc_documents/{kyc_document_id}"; //PUT
     //KYCDocument
-    //{  "id":"wuwjfuha234678",  "customer_number":"1234",  "type":"passport",  "number":"123567",  "issue_date":"2013-01-22T00:08:00Z",  "issue_place":"London",  "expiry_date":"2013-01-22T00:08:00Z"}
-
-    public static String AddKYCMedia = "/banks/{bank_id}/customers/{customer_id}/kyc_media"; //POST
+    //{  "customer_number":"1234",  "type":"passport",  "number":"123567",  "issue_date":"2013-01-22T00:08:00Z",  "issue_place":"London",  "expiry_date":"2013-01-22T00:08:00Z"}
+    public static String AddKYCMedia = "/banks/{bank_id}/customers/{customer_id}/kyc_media/{kyc_media_id}"; //PUT
     //KYCMedia
-    //{  "id":"73hyfgayt6ywerwerasd",  "customer_number":"1239879",  "type":"image",  "url":"http://www.example.com/id-docs/123/image.png",  "date":"2013-01-22T00:08:00Z",  "relates_to_kyc_document_id":"wuwjfuha234678",  "relates_to_kyc_check_id":"98FRd987auhf87jab"}
+    //{  "customer_number":"1239879",  "type":"image",  "url":"http://www.example.com/id-docs/123/image.png",  "date":"2013-01-22T00:08:00Z",  "relates_to_kyc_document_id":"wuwjfuha234678",  "relates_to_kyc_check_id":"98FRd987auhf87jab"}
 
-    public static String AddKYCStatus = "/banks/{bank_id}/customers/{customer_id}/kyc_statuses"; //POST
+    public static String AddKYCStatus = "/banks/{bank_id}/customers/{customer_id}/kyc_statuses"; //PUT
     //KYCStatus
     //{  "customer_number":"8762893876",  "ok":true,  "date":"2013-01-22T00:08:00Z"}
 

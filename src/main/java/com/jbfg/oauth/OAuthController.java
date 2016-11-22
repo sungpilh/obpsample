@@ -102,6 +102,54 @@ public class OAuthController {
         return result;
     }
 
+    @RequestMapping("/kyc")
+    @ResponseBody
+    public String kycTest(HttpServletRequest request){
+        String result ="";
+        try {
+            String oauthToken = (String) request.getSession().getAttribute("oauth_token");
+            String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
+
+            String authorizationHeader = authAuthenticator.generateOauthAPIHeader(API.applyAPIParameter(API.GetCustomerForLoggedInUser, "jbfg.02.kr"), "GET", oauthToken, oauthTokenSecret, new String[]{});
+            client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+
+            JSONObject customer = new JSONObject(client.get(API.host + API.applyAPIParameter(API.GetCustomerForLoggedInUser, "jbfg.02.kr"), new HashMap()));
+            System.out.println(customer.toString(3));
+
+            String customer_id = customer.getString("customer_id");
+            String customer_number = customer.getString("customer_number");
+
+            KYCCheck kycCheck = new KYCCheck(customer_number, "2016-11-22T00:08:50Z", "online_meeting", "67876", "Simon Redfern", true, "");
+
+            String json = gson.toJson(kycCheck);
+
+            //CreateAccount에 필요한 파라미터를 지정합니다.
+            String api = API.applyAPIParameter(API.AddKYCCheck, "jbfg.02.kr", customer_id, "4");
+
+
+            //파라미터가 적용된 api와 method, token, token_secret 을 사용하여 헤더를 생성합니다.
+            authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "PUT", oauthToken, oauthTokenSecret, new String[]{});
+            client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+            client.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));   //중요! 없으면 서버에서 인지를 못함
+            result = client.putJson(API.host + api, json);
+
+            JSONObject accountResult = new JSONObject(result);
+
+            result = accountResult.toString(3);
+            System.out.println(result);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
+    ///banks/jbfg.02.kr/customers/111111112/kyc_check/12304ea05a0-76bf-40ed-93f9-2e1d8b02a9fd
+    ///banks/jbfg.02.kr/customers/111111112/kyc_check/12304ea05a0-76bf-40ed-93f9-2e1d8b02a9fd
+    ///banks/jbfg.02.kr/customers/80c8fc48-c2dd-476d-bf8b-76bef89e253a/kyc_check/1
+
+
     @RequestMapping("/customer")
     @ResponseBody
     public String customertest(HttpServletRequest request) {
@@ -110,9 +158,6 @@ public class OAuthController {
         try {
             String oauthToken = (String) request.getSession().getAttribute("oauth_token");
             String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
-
-            System.out.println(oauthToken);
-            System.out.println(oauthTokenSecret);
 
             String authorizationHeader = authAuthenticator.generateOauthAPIHeader(API.applyAPIParameter(API.GetUserCurrent), "GET", oauthToken, oauthTokenSecret, new String[]{});
 
@@ -124,7 +169,7 @@ public class OAuthController {
             String userId = currentUser.getString("user_id");
 
             Customer customer = new Customer(userId,
-                    "1111111111",
+                    "111111112",
                     "Joe David Blogss",
                     "+821030859101",
                     "hyunsp@test.com.xxx",

@@ -6,6 +6,7 @@ import com.jbfg.APIClient;
 import com.jbfg.api.*;
 import org.apache.http.HttpHeaders;
 import org.apache.http.message.BasicHeader;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,7 @@ public class OAuthController {
     /**
      * 진입 포인트
      * OAuth 인증이 필요한 API에 접근을 하기위해 사용자를 인증페이지로 이동시키는 역할을 합니다.
+     *
      * @return
      * @throws Exception
      */
@@ -102,10 +104,34 @@ public class OAuthController {
         return result;
     }
 
+    @RequestMapping("/my/accounts")
+    @ResponseBody
+    public String getAccounts(HttpServletRequest request){
+        String result = "";
+        try {
+            String oauthToken = (String) request.getSession().getAttribute("oauth_token");
+            String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
+
+            String authorizationHeader = authAuthenticator.generateOauthAPIHeader(API.applyAPIParameter(API.GetPrivateAccountsAtAllPBanks), "GET", oauthToken, oauthTokenSecret, new String[]{});
+            client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+
+            JSONArray resultObj = new JSONArray(client.get(API.host + API.applyAPIParameter(API.GetPrivateAccountsAtAllPBanks), new HashMap()));
+
+
+            result = resultObj.toString(3);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
     @RequestMapping("/kyc")
     @ResponseBody
-    public String kycTest(HttpServletRequest request){
-        String result ="";
+    public String kycTest(HttpServletRequest request) {
+        String result = "";
         try {
             String oauthToken = (String) request.getSession().getAttribute("oauth_token");
             String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
@@ -137,7 +163,7 @@ public class OAuthController {
 
             result = accountResult.toString(3);
             System.out.println(result);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -149,12 +175,31 @@ public class OAuthController {
     ///banks/jbfg.02.kr/customers/111111112/kyc_check/12304ea05a0-76bf-40ed-93f9-2e1d8b02a9fd
     ///banks/jbfg.02.kr/customers/80c8fc48-c2dd-476d-bf8b-76bef89e253a/kyc_check/1
 
+    @RequestMapping("/status")
+    @ResponseBody
+    public JSONObject status(HttpServletRequest request) {
+        JSONObject result = null;
+        try {
+            String oauthToken = (String) request.getSession().getAttribute("oauth_token");
+            String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
+            String api = API.applyAPIParameter(API.AddKYCStatus, "jbfg.02.kr", "80c8fc48-c2dd-476d-bf8b-76bef89e253a");
+            String authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "GET", oauthToken, oauthTokenSecret, new String[]{});
+            client.setHeader(new BasicHeader(HttpHeaders.AUTHORIZATION, authorizationHeader));
+            result = new JSONObject(client.get(API.host + api, new HashMap()));
+            System.out.println(result.toString(3));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 
     @RequestMapping("/customer")
     @ResponseBody
     public String customertest(HttpServletRequest request) {
 
-        String result ="";
+        String result = "";
         try {
             String oauthToken = (String) request.getSession().getAttribute("oauth_token");
             String oauthTokenSecret = (String) request.getSession().getAttribute("oauth_token_secret");
@@ -176,20 +221,20 @@ public class OAuthController {
                     "2013-01-22T00:08:00Z",
                     "Single",
                     1,
-                    new String[] {"2013-01-22T00:08:00Z"},
+                    new String[]{"2013-01-22T00:08:00Z"},
                     "Bachelor’s Degree",
                     "Employed",
                     true,
                     "2016-11-21T00:08:00Z",
-                    new Image("www.example.com/person/123/image.png","2016-11-21T00:08:00Z")   // 이미지 정보 꼭 넣어 주셔야 합니다.
-                    );
+                    new Image("www.example.com/person/123/image.png", "2016-11-21T00:08:00Z")   // 이미지 정보 꼭 넣어 주셔야 합니다.
+            );
 
             String json = gson.toJson(customer);
 
             System.out.println(json);
 
             //CreateAccount에 필요한 파라미터를 지정합니다.
-            String api = API.applyAPIParameter(API.CreateCustomer, "jbfg.02.kr");
+            String api = API.applyAPIParameter(API.CreateCustomer, "jbfg.01.kr");
 
             //파라미터가 적용된 api와 method, token, token_secret 을 사용하여 헤더를 생성합니다.
             authorizationHeader = authAuthenticator.generateOauthAPIHeader(api, "POST", oauthToken, oauthTokenSecret, new String[]{});
@@ -201,7 +246,7 @@ public class OAuthController {
 
             result = accountResult.toString(3);
             System.out.println(result);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
